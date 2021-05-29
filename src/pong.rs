@@ -55,7 +55,7 @@ fn initialise_ball(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) 
     local_transform.set_translation_xyz(ARENA_WIDTH / 2.0, ARENA_HEIGHT / 2.0, 0.0);
 
     // Assign the sprite for the ball. The ball is the second sprite in the sheet.
-    let sprite_render = SpriteRender::new(sprite_sheet_handle, 1);
+    let sprite_render = SpriteRender::new(sprite_sheet_handle, 0);
 
     world
         .create_entity()
@@ -198,7 +198,7 @@ impl SimpleState for Pong {
         // `texture` is the pixel data.
         self.sprite_sheet_handle.replace(load_sprite_sheet(world));
 
-        initialise_paddles(world, self.sprite_sheet_handle.clone().unwrap());
+        //initialise_paddles(world, self.sprite_sheet_handle.clone().unwrap());
         initialise_camera(world);
         initialise_scoreboard(world);
     }
@@ -230,7 +230,7 @@ fn load_sprite_sheet(world: &mut World) -> Handle<SpriteSheet> {
         let loader = world.read_resource::<Loader>();
         let texture_storage = world.read_resource::<AssetStorage<Texture>>();
         loader.load(
-            "texture/pong_spritesheet.png",
+            "texture/pieces_spritesheet.png",
             ImageFormat::default(),
             (),
             &texture_storage,
