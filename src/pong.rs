@@ -19,8 +19,8 @@ pub struct Pong {
     sprite_sheet_handle: Option<Handle<SpriteSheet>>,
 }
 
-pub const ARENA_HEIGHT: f32 = 100.0;
-pub const ARENA_WIDTH: f32 = 100.0;
+pub const ARENA_HEIGHT: f32 = 1024.0;
+pub const ARENA_WIDTH: f32 = 768.0;
 pub const PADDLE_HEIGHT: f32 = 16.0;
 pub const PADDLE_WIDTH: f32 = 4.0;
 pub const BALL_VELOCITY_X: f32 = 75.0;
@@ -55,7 +55,7 @@ fn initialise_ball(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) 
     local_transform.set_translation_xyz(ARENA_WIDTH / 2.0, ARENA_HEIGHT / 2.0, 0.0);
 
     // Assign the sprite for the ball. The ball is the second sprite in the sheet.
-    let sprite_render = SpriteRender::new(sprite_sheet_handle, 1);
+    let sprite_render = SpriteRender::new(sprite_sheet_handle, 0);
 
     world
         .create_entity()
@@ -105,7 +105,7 @@ fn initialise_paddles(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet
     right_transform.set_translation_xyz(ARENA_WIDTH - PADDLE_WIDTH * 0.5, y, 0.0);
 
     // Assign the sprites for the paddles
-    let sprite_render = SpriteRender::new(sprite_sheet_handle, 0);  // paddle is the first sprite in the sprite_sheet
+    let sprite_render = SpriteRender::new(sprite_sheet_handle, 1);  // paddle is the first sprite in the sprite_sheet
 
     // Create a left plank entity.
     world
@@ -230,7 +230,8 @@ fn load_sprite_sheet(world: &mut World) -> Handle<SpriteSheet> {
         let loader = world.read_resource::<Loader>();
         let texture_storage = world.read_resource::<AssetStorage<Texture>>();
         loader.load(
-            "texture/pong_spritesheet.png",
+            //"texture/pong_spritesheet.png",
+            "texture/pieces_spritesheet.png",
             ImageFormat::default(),
             (),
             &texture_storage,
@@ -240,7 +241,8 @@ fn load_sprite_sheet(world: &mut World) -> Handle<SpriteSheet> {
     let loader = world.read_resource::<Loader>();
     let sprite_sheet_store = world.read_resource::<AssetStorage<SpriteSheet>>();
     loader.load(
-        "texture/pong_spritesheet.ron", // Here we load the associated ron file
+        //"texture/pong_spritesheet.ron",
+        "texture/pieces_spritesheet.ron", // Here we load the associated ron file
         SpriteSheetFormat(texture_handle),
         (),
         &sprite_sheet_store,
