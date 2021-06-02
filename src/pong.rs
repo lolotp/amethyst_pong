@@ -24,8 +24,6 @@ pub struct Pong {
 
 pub const ARENA_WIDTH: f32 = 800.0;
 pub const ARENA_HEIGHT: f32 = 600.0;
-pub const PADDLE_HEIGHT: f32 = 16.0;
-pub const PADDLE_WIDTH: f32 = 4.0;
 pub const BALL_VELOCITY_X: f32 = 0.0;
 pub const BALL_VELOCITY_Y: f32 = 0.0;
 pub const BALL_RADIUS: f32 = 2.0;
@@ -77,12 +75,12 @@ impl SimpleState for Pong {
         let world = data.world;
 
         // Wait one second before spawning the ball.
-        self.ball_spawn_timer.replace(1.0);
+        self.ball_spawn_timer.replace(0.0);
 
         // Load the spritesheet necessary to render the graphics.
         // `spritesheet` is the layout of the sprites on the image;
         // `texture` is the pixel data.
-        self.sprite_sheet_handle.replace(load_sprite_sheet(world));
+        self.sprite_sheet_handle.replace(load_sprite_sheet(world, "pieces_spritesheet"));
 
         initialise_camera(world);
     }
@@ -106,7 +104,7 @@ impl SimpleState for Pong {
     }
 }
 
-fn load_sprite_sheet(world: &mut World) -> Handle<SpriteSheet> {
+fn load_sprite_sheet(world: &mut World, spritsheet_name: &str) -> Handle<SpriteSheet> {
     // Load the sprite sheet necessary to render the graphics.
     // The texture is the pixel data
     // `texture_handle` is a cloneable reference to the texture
@@ -114,8 +112,7 @@ fn load_sprite_sheet(world: &mut World) -> Handle<SpriteSheet> {
         let loader = world.read_resource::<Loader>();
         let texture_storage = world.read_resource::<AssetStorage<Texture>>();
         loader.load(
-            //"texture/pong_spritesheet.png",
-            "texture/pieces_spritesheet.png",
+            format!("texture/{}.png", spritsheet_name),
             ImageFormat::default(),
             (),
             &texture_storage,
@@ -125,8 +122,7 @@ fn load_sprite_sheet(world: &mut World) -> Handle<SpriteSheet> {
     let loader = world.read_resource::<Loader>();
     let sprite_sheet_store = world.read_resource::<AssetStorage<SpriteSheet>>();
     loader.load(
-        //"texture/pong_spritesheet.ron",
-        "texture/pieces_spritesheet.ron", // Here we load the associated ron file
+        format!("texture/{}.ron", spritsheet_name), // Here we load the associated ron file
         SpriteSheetFormat(texture_handle),
         (),
         &sprite_sheet_store,
