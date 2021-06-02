@@ -5,7 +5,7 @@ use amethyst::{
     core::math::Vector3,
     core::transform::Transform,
     core::timing::Time,
-    ecs::{Component, DenseVecStorage, Entity},
+    ecs::{Component, DenseVecStorage},
     prelude::*,
     renderer::{
         camera::Camera,
@@ -13,7 +13,6 @@ use amethyst::{
         sprite::{SpriteRender, SpriteSheet, SpriteSheetFormat},
         Texture,
     },
-    ui::{Anchor, LineMode, TtfFormat, UiText, UiTransform},
 };
 
 #[derive(Default)]
@@ -37,6 +36,23 @@ fn initialise_camera(world: &mut World) {
         .create_entity()
         .with(Camera::standard_2d(ARENA_WIDTH, ARENA_HEIGHT))
         .with(transform)
+        .build();
+}
+
+fn initialise_board(world: &mut World) {
+    let sprite_sheet_handle = load_sprite_sheet(world, "board_spritesheet");
+    // Create the translation.
+    let mut local_transform = Transform::default();
+    local_transform.set_translation_xyz(ARENA_WIDTH / 2.0, ARENA_HEIGHT / 2.0, 0.0);
+    local_transform.set_scale(Vector3::new(0.6, 0.6, 1.0));
+
+    // Assign the sprite for the ball. The ball is the second sprite in the sheet.
+    let sprite_render = SpriteRender::new(sprite_sheet_handle, 0);
+
+    world
+        .create_entity()
+        .with(sprite_render)
+        .with(local_transform)
         .build();
 }
 
@@ -83,6 +99,7 @@ impl SimpleState for Pong {
         self.sprite_sheet_handle.replace(load_sprite_sheet(world, "pieces_spritesheet"));
 
         initialise_camera(world);
+        initialise_board(world);
     }
 
     fn update(&mut self, data: &mut StateData<'_, GameData<'_, '_>>) -> SimpleTrans {
