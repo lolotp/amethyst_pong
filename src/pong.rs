@@ -2,6 +2,7 @@
 
 use amethyst::{
     assets::{AssetStorage, Loader, Handle},
+    core::math::Vector3,
     core::transform::Transform,
     core::timing::Time,
     ecs::{Component, DenseVecStorage, Entity},
@@ -21,12 +22,12 @@ pub struct Pong {
     sprite_sheet_handle: Option<Handle<SpriteSheet>>,
 }
 
-pub const ARENA_HEIGHT: f32 = 1024.0;
-pub const ARENA_WIDTH: f32 = 768.0;
+pub const ARENA_WIDTH: f32 = 800.0;
+pub const ARENA_HEIGHT: f32 = 600.0;
 pub const PADDLE_HEIGHT: f32 = 16.0;
 pub const PADDLE_WIDTH: f32 = 4.0;
-pub const BALL_VELOCITY_X: f32 = 75.0;
-pub const BALL_VELOCITY_Y: f32 = 50.0;
+pub const BALL_VELOCITY_X: f32 = 0.0;
+pub const BALL_VELOCITY_Y: f32 = 0.0;
 pub const BALL_RADIUS: f32 = 2.0;
 
 fn initialise_camera(world: &mut World) {
@@ -55,6 +56,7 @@ fn initialise_ball(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) 
     // Create the translation.
     let mut local_transform = Transform::default();
     local_transform.set_translation_xyz(ARENA_WIDTH / 2.0, ARENA_HEIGHT / 2.0, 0.0);
+    local_transform.set_scale(Vector3::new(0.25, 0.25, 1.0));
 
     // Assign the sprite for the ball. The ball is the second sprite in the sheet.
     let sprite_render = SpriteRender::new(sprite_sheet_handle, 0);
@@ -188,9 +190,6 @@ fn initialise_scoreboard(world: &mut World) {
 impl SimpleState for Pong {
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
         let world = data.world;
-
-        //world.register::<Paddle>();
-        //world.register::<Ball>(); // <- add this line temporarily
 
         // Wait one second before spawning the ball.
         self.ball_spawn_timer.replace(1.0);
