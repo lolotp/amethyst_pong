@@ -1,4 +1,4 @@
 (
-  title: "pong_2",
+  title: "Cờ tướng",
   dimensions: Some((800, 600)),
 )

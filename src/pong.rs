@@ -23,6 +23,9 @@ pub struct Pong {
 
 pub const ARENA_WIDTH: f32 = 800.0;
 pub const ARENA_HEIGHT: f32 = 600.0;
+pub const CELL_WIDTH: f32 = 100.0;
+pub const CELL_HEIGHT: f32 = 100.0;
+pub const RIVER_WIDTH: f32 = 100.0;
 pub const BALL_VELOCITY_X: f32 = 0.0;
 pub const BALL_VELOCITY_Y: f32 = 0.0;
 pub const BALL_RADIUS: f32 = 2.0;
@@ -39,14 +42,26 @@ fn initialise_camera(world: &mut World) {
         .build();
 }
 
+// (0,0) == bottom left from user's point of view
+const NUM_ROWS: i32 = 10;
+const NUM_COLUMNS: i32 = 9;
+const MID_ROW: f32 = 4.5;
+const MID_COLUMN: f32 = 4.0;
+const BOARD_SCALE_FACTOR:f32 = 0.60;
+fn get_board_coordinates(row: i32, column: i32) -> (f32, f32) {
+    let x = ARENA_WIDTH/2.0 - BOARD_SCALE_FACTOR * (MID_COLUMN-column as f32) * CELL_WIDTH;
+    let y = ARENA_HEIGHT/2.0 - BOARD_SCALE_FACTOR * ((MID_ROW-row as f32).trunc() * CELL_HEIGHT 
+                + (if (row as f32) < MID_ROW {RIVER_WIDTH/2.0} else {-RIVER_WIDTH/2.0}));
+    return (x,y)
+}
+
 fn initialise_board(world: &mut World) {
     let sprite_sheet_handle = load_sprite_sheet(world, "board_spritesheet");
     // Create the translation.
     let mut local_transform = Transform::default();
     local_transform.set_translation_xyz(ARENA_WIDTH / 2.0, ARENA_HEIGHT / 2.0, 0.0);
-    local_transform.set_scale(Vector3::new(0.6, 0.6, 1.0));
+    local_transform.set_scale(Vector3::new(BOARD_SCALE_FACTOR, BOARD_SCALE_FACTOR, 1.0));
 
-    // Assign the sprite for the ball. The ball is the second sprite in the sheet.
     let sprite_render = SpriteRender::new(sprite_sheet_handle, 0);
 
     world
@@ -69,8 +84,9 @@ impl Component for Ball {
 fn initialise_ball(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) {
     // Create the translation.
     let mut local_transform = Transform::default();
-    local_transform.set_translation_xyz(ARENA_WIDTH / 2.0, ARENA_HEIGHT / 2.0, 0.0);
-    local_transform.set_scale(Vector3::new(0.25, 0.25, 1.0));
+    let (x,y) = get_board_coordinates(0, 4);
+    local_transform.set_translation_xyz(x, y, 0.0);
+    local_transform.set_scale(Vector3::new(0.20, 0.20, 1.0));
 
     // Assign the sprite for the ball. The ball is the second sprite in the sheet.
     let sprite_render = SpriteRender::new(sprite_sheet_handle, 0);
