@@ -1,3 +1,2 @@
-mod move_balls;
-
-pub use self::move_balls::MoveBallsSystem;
+mod move_pieces;
+pub use self::move_pieces::MovePiecesSystem;
