@@ -1,18 +1,10 @@
-List((
+Grid((
+    // Width of the texture used by the sprite sheet
     texture_width: 2100,
+    // Height of the texture used by the sprite sheet
     texture_height: 600,
-    sprites: [
-        (
-            x: 0,
-            y: 0,
-            width: 300,
-            height: 300,
-        ),
-        (
-            x: 0,
-            y: 300,
-            width: 300,
-            height: 300,
-        ),
-    ],
+    // Specifies the number of columns in the sprite sheet
+    columns: 7,
+    // Specifies the number of sprites in the spritesheet.
+    sprite_count: Some(14)
 ))

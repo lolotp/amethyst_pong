@@ -24,8 +24,8 @@ pub struct Pong {
 pub const ARENA_WIDTH: f32 = 800.0;
 pub const ARENA_HEIGHT: f32 = 600.0;
 pub const CELL_WIDTH: f32 = 100.0;
-pub const CELL_HEIGHT: f32 = 100.0;
-pub const RIVER_WIDTH: f32 = 100.0;
+pub const CELL_HEIGHT: f32 = 102.0;
+pub const RIVER_WIDTH: f32 = 104.0;
 pub const BALL_VELOCITY_X: f32 = 0.0;
 pub const BALL_VELOCITY_Y: f32 = 0.0;
 pub const BALL_RADIUS: f32 = 2.0;
@@ -86,7 +86,7 @@ fn initialise_ball(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) 
     let mut local_transform = Transform::default();
     let (x,y) = get_board_coordinates(0, 4);
     local_transform.set_translation_xyz(x, y, 0.0);
-    local_transform.set_scale(Vector3::new(0.20, 0.20, 1.0));
+    local_transform.set_scale(Vector3::new(0.15, 0.15, 1.0));
 
     // Assign the sprite for the ball. The ball is the second sprite in the sheet.
     let sprite_render = SpriteRender::new(sprite_sheet_handle, 0);
