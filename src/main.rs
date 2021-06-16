@@ -46,7 +46,7 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(TransformBundle::new())?
         .with_bundle(input_bundle)?
         .with_bundle(UiBundle::<StringBindings>::new())?
-        .with(systems::MoveBallsSystem, "ball_system", &[]);
+        .with(systems::MovePiecesSystem, "pieces_system", &[]);
 
     let mut game = Application::new(assets_dir, Pong::default(), game_data)?;
     game.run();

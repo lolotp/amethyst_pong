@@ -5,14 +5,14 @@ use amethyst::{
     ecs::{Join, Read, ReadStorage, System, SystemData, WriteStorage},
 };
 
-use crate::pong::Ball;
+use crate::pong::Piece;
 
 #[derive(SystemDesc)]
-pub struct MoveBallsSystem;
+pub struct MovePiecesSystem;
 
-impl<'s> System<'s> for MoveBallsSystem {
+impl<'s> System<'s> for MovePiecesSystem {
     type SystemData = (
-        ReadStorage<'s, Ball>,
+        ReadStorage<'s, Piece>,
         WriteStorage<'s, Transform>,
         Read<'s, Time>,
     );

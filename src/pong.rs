@@ -71,12 +71,12 @@ fn initialise_board(world: &mut World) {
         .build();
 }
 
-pub struct Ball {
+pub struct Piece {
     pub velocity: [f32; 2],
     pub radius: f32,
 }
 
-impl Component for Ball {
+impl Component for Piece {
     type Storage = DenseVecStorage<Self>;
 }
 
@@ -94,7 +94,7 @@ fn initialise_ball(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) 
     world
         .create_entity()
         .with(sprite_render)
-        .with(Ball {
+        .with(Piece {
             radius: BALL_RADIUS,
             velocity: [BALL_VELOCITY_X, BALL_VELOCITY_Y],
         })
