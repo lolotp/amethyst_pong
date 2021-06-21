@@ -1,9 +1,9 @@
-mod pong;
+mod chinese_chess;
 mod systems; 
 
 // created by ffreakk
 
-use crate::pong::Pong;
+use crate::chinese_chess::ChineseChess;
 
 use amethyst::{
     core::transform::TransformBundle,
@@ -48,7 +48,7 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(UiBundle::<StringBindings>::new())?
         .with(systems::MovePiecesSystem, "pieces_system", &[]);
 
-    let mut game = Application::new(assets_dir, Pong::default(), game_data)?;
+    let mut game = Application::new(assets_dir, ChineseChess::default(), game_data)?;
     game.run();
 
     Ok(())

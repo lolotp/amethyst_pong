@@ -5,7 +5,7 @@ use amethyst::{
     ecs::{Join, Read, ReadStorage, System, SystemData, WriteStorage},
 };
 
-use crate::pong::Piece;
+use crate::chinese_chess::Piece;
 
 #[derive(SystemDesc)]
 pub struct MovePiecesSystem;
