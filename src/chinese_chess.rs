@@ -93,6 +93,17 @@ pub struct Piece {
     pub velocity: [f32; 2],
 }
 
+impl Piece {
+    fn new(piece_type: PieceType, side: Side, piece_index: i32) -> Piece {
+        return Piece {
+            piece_type: piece_type,
+            side: side,
+            position: get_starting_position(piece_type, side, piece_index),
+            velocity: [0.0, 0.0],
+        };
+    }
+}
+
 impl Component for Piece {
     type Storage = DenseVecStorage<Self>;
 }
@@ -146,18 +157,9 @@ fn get_sprite_index(piece_type: PieceType, side: Side) -> usize {
     }
 }
 
-fn get_initial_piece(piece_type: PieceType, side: Side, piece_index: i32) -> Piece {
-    return Piece {
-        piece_type: piece_type,
-        side: side,
-        position: get_starting_position(piece_type, side, piece_index),
-        velocity: [0.0, 0.0],
-    };
-}
-
 /// Initialises one ball in the middle-ish of the arena.
 fn initialise_piece(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) {
-    let general_piece = get_initial_piece(PieceType::Chariot, Side::Red, 0);
+    let general_piece = Piece::new(PieceType::Chariot, Side::Red, 0);
     // Create the translation.
     let mut local_transform = Transform::default();
     let (x,y) = get_board_coordinates(general_piece.position[0], general_piece.position[1]);
