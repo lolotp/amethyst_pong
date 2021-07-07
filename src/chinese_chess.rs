@@ -163,6 +163,7 @@ fn initialise_piece(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>)
     // Create the translation.
     let mut local_transform = Transform::default();
     let (x,y) = get_board_coordinates(general_piece.position[0], general_piece.position[1]);
+    //println!("piece coordinates are {}, {}", x, y);
     local_transform.set_translation_xyz(x, y, 0.0);
     local_transform.set_scale(Vector3::new(0.15, 0.15, 1.0));
 
