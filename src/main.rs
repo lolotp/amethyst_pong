@@ -41,7 +41,8 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(TransformBundle::new())?
         .with_bundle(InputBundle::<StringBindings>::default())?
         .with_bundle(UiBundle::<StringBindings>::new())?
-        .with(systems::MovePiecesSystem, "pieces_system", &[]);
+        .with(systems::MovePiecesSystem, "pieces_system", &[])
+        .with(systems::MouseRaycastSystem, "mouse_raycast_system", &["input_system"]);
 
     let mut game = Application::new(assets_dir, ChineseChess::default(), game_data)?;
     game.run();
