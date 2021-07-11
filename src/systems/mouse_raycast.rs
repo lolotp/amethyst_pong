@@ -5,8 +5,9 @@ use amethyst::{
         geometry::Plane,
         math::{Point2, Vector2},
     },
-    ecs::{Join, System, Read, ReadStorage, WriteStorage, SystemData},
+    ecs::{Join, System, Read, ReadStorage, WriteStorage, ReadExpect, SystemData},
     renderer::camera::Camera,
+    window::ScreenDimensions,
 };
 use amethyst::input::{InputHandler, StringBindings};
 
@@ -20,19 +21,18 @@ impl<'s> System<'s> for MouseRaycastSystem {
         ReadStorage<'s, Piece>,
         WriteStorage<'s, Transform>,
         Read<'s, InputHandler<StringBindings>>,
+        ReadExpect<'s, ScreenDimensions>,
         ReadStorage<'s, Camera>,
     );
 
-    fn run(&mut self, (pieces, mut locals, input, cameras): Self::SystemData) {
+    fn run(&mut self, (pieces, mut locals, input, screen_dimensions, cameras): Self::SystemData) {
         if let Some(mouse_position) = input.mouse_position() {
             for (camera, camera_transform) in (&cameras, &mut locals).join() {
                 let ray = camera.screen_ray(
                     Point2::new(mouse_position.0, mouse_position.1),
                     Vector2::new(
-                        // not sure why this is the screen dimesions on my laptop
-                        // supposed to be 800,600
-                        2000.0, 
-                        1500.0,
+                        screen_dimensions.width(), 
+                        screen_dimensions.height(),
                     ),
                     camera_transform,
                 );
