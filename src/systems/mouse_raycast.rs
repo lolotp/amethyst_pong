@@ -27,7 +27,7 @@ impl<'s> System<'s> for MouseRaycastSystem {
 
     fn run(&mut self, (pieces, mut locals, input, screen_dimensions, cameras): Self::SystemData) {
         if let Some(mouse_position) = input.mouse_position() {
-            for (camera, camera_transform) in (&cameras, &mut locals).join() {
+            for (camera, camera_transform) in (&cameras, &locals).join() {
                 let ray = camera.screen_ray(
                     Point2::new(mouse_position.0, mouse_position.1),
                     Vector2::new(
@@ -38,8 +38,15 @@ impl<'s> System<'s> for MouseRaycastSystem {
                 );
                 let distance = ray.intersect_plane(&Plane::with_z(0.0)).unwrap();
                 let mouse_world_position = ray.at_distance(distance);
-                println!("mouse_world is {}, {}", mouse_world_position.x, mouse_world_position.y);
-                println!("mouse is {}, {}", mouse_position.0, mouse_position.1);
+                //println!("mouse_world is {}, {}", mouse_world_position.x, mouse_world_position.y);
+                //println!("mouse is {}, {}", mouse_position.0, mouse_position.1);
+
+                for (piece, piece_transform) in (&pieces, &locals).join() {
+                    if (f32::abs(piece_transform.translation().x - mouse_world_position.x) < Piece::HITBOX) &&
+                     (f32::abs(piece_transform.translation().y - mouse_world_position.y) < Piece::HITBOX) {
+                        //println!("I'm in piece {:?}", piece.piece_type);
+                    } 
+                }
             }
         }
     }

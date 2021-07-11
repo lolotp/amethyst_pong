@@ -69,7 +69,7 @@ fn initialise_board(world: &mut World) {
         .build();
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub enum PieceType {
     Pawn,
     Horse,
@@ -80,12 +80,13 @@ pub enum PieceType {
     General,
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub enum Side {
     Red, // Tiên
     Black, // Hậu
 }
 
+#[derive(Debug)]
 pub struct Piece {
     pub piece_type: PieceType,
     pub side: Side,
@@ -94,6 +95,7 @@ pub struct Piece {
 }
 
 impl Piece {
+    pub const HITBOX: f32 = 150.0;
     fn new(piece_type: PieceType, side: Side, piece_index: i32) -> Piece {
         return Piece {
             piece_type: piece_type,
