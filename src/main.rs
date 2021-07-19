@@ -27,11 +27,6 @@ fn main() -> amethyst::Result<()> {
     let assets_dir = app_root.join("assets");
     let config_dir = app_root.join("config");
     let display_config_path = config_dir.join("display.ron");
-    let binding_path = app_root.join("config").join("bindings.ron");
-
-
-    let input_bundle = InputBundle::<StringBindings>::new()
-        .with_bindings_from_file(binding_path)?;
 
     let game_data = GameDataBuilder::default()
         .with_bundle(
@@ -44,9 +39,10 @@ fn main() -> amethyst::Result<()> {
                 .with_plugin(RenderUi::default()),
         )?        
         .with_bundle(TransformBundle::new())?
-        .with_bundle(input_bundle)?
+        .with_bundle(InputBundle::<StringBindings>::default())?
         .with_bundle(UiBundle::<StringBindings>::new())?
-        .with(systems::MovePiecesSystem, "pieces_system", &[]);
+        .with(systems::MovePiecesSystem, "pieces_system", &[])
+        .with(systems::MouseRaycastSystem, "mouse_raycast_system", &["input_system"]);
 
     let mut game = Application::new(assets_dir, ChineseChess::default(), game_data)?;
     game.run();

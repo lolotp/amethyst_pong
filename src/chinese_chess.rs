@@ -6,6 +6,10 @@ use amethyst::{
     core::transform::Transform,
     core::timing::Time,
     ecs::{Component, DenseVecStorage},
+    renderer::{
+        palette::Srgba,
+        resources::Tint,
+    },
     prelude::*,
     renderer::{
         camera::Camera,
@@ -69,7 +73,7 @@ fn initialise_board(world: &mut World) {
         .build();
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub enum PieceType {
     Pawn,
     Horse,
@@ -80,12 +84,13 @@ pub enum PieceType {
     General,
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub enum Side {
     Red, // Tiên
     Black, // Hậu
 }
 
+#[derive(Debug)]
 pub struct Piece {
     pub piece_type: PieceType,
     pub side: Side,
@@ -94,6 +99,8 @@ pub struct Piece {
 }
 
 impl Piece {
+    // TODO(lolotp): figure out a way to rigorously derive the HITBOX
+    pub const HITBOX: f32 = 22.5;
     fn new(piece_type: PieceType, side: Side, piece_index: i32) -> Piece {
         return Piece {
             piece_type: piece_type,
@@ -158,21 +165,23 @@ fn get_sprite_index(piece_type: PieceType, side: Side) -> usize {
 }
 
 /// Initialises one ball in the middle-ish of the arena.
-fn initialise_piece(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) {
-    let general_piece = Piece::new(PieceType::Chariot, Side::Red, 0);
+fn initialise_piece(world: &mut World, piece: Piece, sprite_sheet_handle: Handle<SpriteSheet>) {
     // Create the translation.
     let mut local_transform = Transform::default();
-    let (x,y) = get_board_coordinates(general_piece.position[0], general_piece.position[1]);
+    let (x,y) = get_board_coordinates(piece.position[0], piece.position[1]);
+    //println!("piece coordinates are {}, {}", x, y);
     local_transform.set_translation_xyz(x, y, 0.0);
     local_transform.set_scale(Vector3::new(0.15, 0.15, 1.0));
 
-    let sprite_render = SpriteRender::new(sprite_sheet_handle, get_sprite_index(general_piece.piece_type, general_piece.side));
+    let sprite_render = SpriteRender::new(sprite_sheet_handle, get_sprite_index(piece.piece_type, piece.side));
+    let tint = Tint(Srgba::new(1.0, 1.0, 1.0, 1.0));
 
     world
         .create_entity()
         .with(sprite_render)
-        .with(general_piece)
+        .with(piece)
         .with(local_transform)
+        .with(tint)
         .build();
 }
 
@@ -200,8 +209,8 @@ impl SimpleState for ChineseChess {
                 timer -= time.delta_seconds();
             }
             if timer <= 0.0 {
-                // When timer expire, spawn the ball
-                initialise_piece(data.world, self.sprite_sheet_handle.clone().unwrap());
+                // When timer expire, spawn the piece
+                initialise_piece(data.world, Piece::new(PieceType::Chariot, Side::Red, 0), self.sprite_sheet_handle.clone().unwrap());
             } else {
                 // If timer is not expired yet, put it back onto the state.
                 self.ball_spawn_timer.replace(timer);
